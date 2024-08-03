@@ -1,0 +1,25 @@
+{
+  "name": "skincare-coach-server",
+  "version": "1.0.0",
+  "description": "Skincare coach using AI",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app/index.js",
+    "dev": "nodemon app/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-errors": "^2.0.0",
+    "mongoose": "^8.5.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "eslint": "^9.8.0",
+    "globals": "^15.8.0",
+    "nodemon": "^3.1.4"
+  }
+}
