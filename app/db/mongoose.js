@@ -1,9 +1,11 @@
 // getting-started.js
 import mongoose from "mongoose";
-import env from "node:process";
+import { env } from "node:process";
 
-async function main() {
-    await mongoose.connect(env.MONGO_URI);
+export default async function () {
+    try {
+        await mongoose.connect(env.MONGO_URI);
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-export default main;

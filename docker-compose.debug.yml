@@ -1,0 +1,16 @@
+services:
+  debug:
+    extends:
+      file: compose.yaml
+      service: server
+    command: "npm run debug"
+    ports:
+      - 3000:3000
+      - 9229:9229
+  mongo:
+    extends:
+      file: compose.yaml
+      service: mongo
+
+volumes:
+  database:
