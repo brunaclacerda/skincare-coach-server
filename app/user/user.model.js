@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
 import validator from "validator";
-// import crypto from "cripto";
 
 import { parse, differenceInYears } from "date-fns";
-// const validator = require("validator");
-// const bcrypt = require("bcryptjs");
-import { USER, SKIN } from "../utils/enum.collection.js";
+import { USER, SKIN_TYPE, SKIN_CONCERN } from "../utils/enum.collection.js";
 
 import Schema from "../db/Schema.js";
 
@@ -89,14 +86,19 @@ const userSchema = new Schema(
         },
         skinType: {
             type: String,
-            enum: SKIN.TYPE,
+            enum: SKIN_TYPE,
         },
         concern: [
             {
                 type: String,
-                enum: SKIN.CONCERN,
+                enum: SKIN_CONCERN,
+                required: true,
             },
         ],
+        gender: {
+            type: String,
+            enum: USER.GENDER,
+        },
     },
     {
         virtuals: {
@@ -115,22 +117,11 @@ const userSchema = new Schema(
     }
 );
 
-userSchema.pre("save", function (next) {
-    // const user = this;
-
-    // if (user.isModified("password")) {
-    //     user.password = bcrypt.hash(user.password, 8);
-    // }
-
-    next();
-});
-
 userSchema.methods.toJSON = function () {
     const user = this;
     const userObject = user.toObject();
 
     delete userObject.password;
-    // delete userObject.avatar;
 
     return userObject;
 };
@@ -139,7 +130,6 @@ userSchema.statics.findByCredential = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) return;
     const hash = crypto.pbkdf2Sync(password, SALT, 310000, 32, `sha256`);
-    // .timingSafeEqual(user.password);
 
     if (!crypto.timingSafeEqual(user.password, hash)) {
         throw new Error("Incorrect username or password.");
@@ -182,6 +172,7 @@ userSchema.post("save", function (error, doc, next) {
 });
 
 const User = mongoose.model("User", userSchema);
+
 export default User;
 
 (async function () {

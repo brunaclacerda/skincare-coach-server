@@ -7,6 +7,7 @@ import passport from "passport";
 import { env } from "node:process";
 
 import userRouter from "./user/user.router.js";
+import surveyRouter from "./survey/survey.router.js";
 import errorHandler from "./middleware/error.js";
 import mongoose from "./db/mongoose.js";
 import DBStore from "./db/session.js";
@@ -51,6 +52,7 @@ app.use(
 );
 
 app.use("/user", userRouter);
+app.use("/survey", surveyRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

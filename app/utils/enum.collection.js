@@ -2,9 +2,27 @@ import * as ENUM from "./enum.js";
 
 export const USER = {
     STATUS: Object.values(ENUM.USER_STATUS),
+    GENDER: Object.values(ENUM.USER_GENDER),
 };
 
+export const SKIN_TYPE = Object.values(ENUM.SKIN_TYPE);
+export const SKIN_CONCERN = Object.values(ENUM.SKIN_CONCERN);
+
 export const SKIN = {
-    TYPE: Object.values(ENUM.SKIN_TYPE),
-    CONCERN: Object.values(ENUM.SKIN_CONCERN),
+    TYPE: ENUM.SKIN_TYPE,
+    CONCERN: ENUM.SKIN_CONCERN,
+};
+
+export const SURVEY = {
+    SKIN_ANSWER: ENUM.SKIN_ANSWER_KEY,
+    ANALYSIS: ENUM.SKIN_ANALYSIS,
+    CONCERN_SENSITIV: ENUM.SENSITIV_ANS_CONCERN,
+    SENSITIV_ANS_KEY: ENUM.SENSITIV_ANS_KEY,
+    CONCERN: {
+        UPD: "concern",
+        KEY: ENUM.SKIN_CONCERN,
+        ANSWER_KEY: ENUM.SKIN_CONCERN_ANSWER,
+        ANSWER_WEIGTH: ENUM.SKIN_CONCERN_WEIGTH,
+        SECTION: ENUM.SECTION_CONCERN,
+    },
 };

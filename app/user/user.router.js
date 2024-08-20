@@ -32,7 +32,6 @@ passport.deserializeUser(function (user, cb) {
 const router = express.Router();
 
 router.post("/login", passport.authenticate("local", {}), (req, res) => {
-    console.log(req);
     res.send();
 });
 
@@ -67,7 +66,21 @@ router.patch("/me", auth, async (req, res, next) => {
         const user = await service.updateUser(req.body, req.user);
         res.status(HTTP_STATUS.OK).send(user);
     } catch (error) {
-        console.log(error);
+        next({
+            message: error.message,
+            status: HTTP_STATUS.BAD_REQUEST,
+            cause: error,
+        });
+    }
+});
+
+router.post("/survey", auth, async (req, res, next) => {
+    try {
+        if (!req.body) return res.status(HTTP_STATUS.BAD_REQUEST).send();
+
+        await service.newUserSurvey(req.body, req.user);
+        res.send();
+    } catch (error) {
         next({
             message: error.message,
             status: HTTP_STATUS.BAD_REQUEST,
