@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-import { parse, differenceInYears } from "date-fns";
+import { differenceInYears } from "date-fns";
 import { USER, SKIN_TYPE, SKIN_CONCERN } from "../utils/enum.collection.js";
+import { USER_STATUS } from "../utils/enum.js";
 
 import Schema from "../db/Schema.js";
 
@@ -60,9 +61,9 @@ const userSchema = new Schema(
 		},
 
 		status: {
-			type: Number,
-			default: USER.STATUS.ACTIVE,
-			enum: [USER.STATUS, "Invalid status informed"],
+			type: String,
+			default: USER_STATUS.active,
+			// enum: [USER.STATUS, "Invalid status informed"],
 		},
 
 		birthDate: {
@@ -136,6 +137,14 @@ userSchema.statics.findByCredential = async (email, password) => {
 		throw new Error("Incorrect username or password.");
 	}
 	return user;
+};
+
+userSchema.statics.findActiveUsers = async (criteria) => {
+	let filter = { status: USER_STATUS.active };
+	if (criteria.skinType) filter.skinType = criteria.skinType;
+	if (criteria.concern?.length) filter.concern = criteria.concern;
+	const users = await User.find(filter);
+	return users;
 };
 
 userSchema.pre("save", async function (next) {

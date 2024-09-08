@@ -19,41 +19,45 @@ import auth from "./middleware/auth.js";
 
 mongoose().catch((err) => console.log(err));
 
-const MINUTE = 6000;
+const MINUTE = 60000;
 
 const app = express();
 
 app.use(
-    session({
-        secret: env.SESSION_SECRET,
-        cookie: {
-            maxAge: MINUTE * 30,
-        },
-        store: DBStore(session),
-        resave: true,
-        saveUninitialized: false,
-        unset: "destroy",
-    })
+	session({
+		secret: env.SESSION_SECRET,
+		cookie: {
+			maxAge: MINUTE * 30,
+		},
+		store: DBStore(session),
+		resave: true,
+		saveUninitialized: false,
+		unset: "destroy",
+	})
 );
 app.use(passport.authenticate("session"));
-app.use(helmet());
+app.use(
+	helmet({
+		crossOriginOpenerPolicy: false,
+	})
+);
 app.use(express.json());
 
 app.disable("x-powered-by");
 
 /* Morgan settings */
 morgan.token("error", (req, res) => {
-    return res.locals.message;
+	return res.locals.message;
 });
 app.use(
-    morgan(
-        ":method :url :status :response-time ms - :res[content-length] :error",
-        {
-            skip: function (req, res) {
-                return res.statusCode < 400;
-            },
-        }
-    )
+	morgan(
+		":method :url :status :response-time ms - :res[content-length] :error",
+		{
+			skip: function (req, res) {
+				return res.statusCode < 400;
+			},
+		}
+	)
 );
 
 /* routers */
@@ -65,7 +69,7 @@ app.use("/chat", chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+	next(createError(404));
 });
 
 app.use(errorHandler);

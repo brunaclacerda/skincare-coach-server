@@ -42,10 +42,12 @@ export async function updateUser(input, userID) {
 export async function verify(email, password, cb) {
 	try {
 		const user = await User.findByCredential(email, password);
-		if (!user.firstLogin)
-			await User.findByIdAndUpdate(user._id, { firstLogin: new Date() });
 
 		if (user) {
+			if (!user.firstLogin)
+				await User.findByIdAndUpdate(user._id, {
+					firstLogin: new Date(),
+				});
 			cb(null, user);
 		} else {
 			cb(null, false, {

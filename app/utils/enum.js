@@ -1,6 +1,6 @@
 export const USER_STATUS = Object.freeze({
-	ACTIVE: "active",
-	INACTIVE: "inactive",
+	active: "0",
+	inactive: "1",
 });
 
 export const USER_GENDER = Object.freeze({
@@ -112,4 +112,18 @@ export const HTTP_STATUS = Object.freeze({
 	UNAUTHORIZED: 401,
 	FORBIDDEN: 403,
 	NOT_FOUND: 404,
+});
+
+// Topic
+
+export const TOPIC_STATUS = Object.freeze({
+	CREATED: 0,
+	DISTRIBUTED: 1,
+	CANCELED: 3,
+});
+
+//Chat
+export const CHAT_STATUS = Object.freeze({
+	UNREAD: 0,
+	READ: 1,
 });
