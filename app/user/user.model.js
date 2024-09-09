@@ -22,13 +22,11 @@ const userSchema = new Schema(
 		name: {
 			first: {
 				type: String,
-				required: "First name is required.",
 				minlength: [4, "First naame should have at least 4 letters."],
 				trim: true,
 			},
 			last: {
 				type: String,
-				// required: "Last name is required.",
 				minlength: [4, "Last name should have at least 4 letters."],
 				trim: true,
 			},
@@ -63,7 +61,6 @@ const userSchema = new Schema(
 		status: {
 			type: String,
 			default: USER_STATUS.active,
-			// enum: [USER.STATUS, "Invalid status informed"],
 		},
 
 		birthDate: {
@@ -78,7 +75,6 @@ const userSchema = new Schema(
 					throw new Error("Birth date informed is invalid.");
 				}
 				const newDate = new Date();
-				// const parsedDate = parse(date, DATE_FORMAT, newDate);
 
 				if (differenceInYears(newDate, date) < 18) {
 					throw new Error("User must be at least 18-year-old.");

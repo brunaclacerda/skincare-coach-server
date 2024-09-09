@@ -2,13 +2,21 @@ import User from "./user.model.js";
 import UserSurvey from "./survey.user.model.js";
 import Survey from "../survey/survey.model.js";
 import { SKIN, SURVEY } from "../utils/enum.collection.js";
+import Topic from "../admin/topic.model.js";
+import Chat from "../chat/chat.model.js";
 
 const SKIN_TYPE_SECTION = "Oil Production";
+
+import { TOPIC_STATUS, CHAT_STATUS } from "../utils/enum.js";
 
 export async function newUser(input) {
 	const user = new User(input);
 
 	return await user.save();
+}
+
+export async function me(user) {
+	return await User.findById(user);
 }
 
 export async function updateUser(input, userID) {
@@ -220,6 +228,49 @@ async function analiseSkin(userSurvey) {
 	return userUpdate;
 }
 
+export async function createChats(user) {
+	try {
+		const skinFilter = {
+			$or: [
+				{ "criteria.skinType": user.skinType },
+				{ "criteria.skinType": null },
+				{ "criteria.skinType": { $exists: false } },
+			],
+		};
+		const concernFilter = {
+			$or: [
+				{ "criteria.concern": [] },
+				{ "criteria.concern": { $in: user.concern } },
+			],
+		};
+		const filter = {
+			$and: [
+				{ status: TOPIC_STATUS.DISTRIBUTED },
+				skinFilter,
+				concernFilter,
+			],
+		};
+
+		const topics = await Topic.find(filter);
+		if (!topics) return;
+		const insertQuery = topics.map((topic) => {
+			return {
+				user: user._id,
+				topic: topic._id,
+				status: CHAT_STATUS.UNREAD,
+				title: topic.title,
+				message: topic.text.map((text) => {
+					return { content: text, role: "admin" };
+				}),
+			};
+		});
+		const insertResult = await Chat.insertMany(insertQuery);
+		return insertResult;
+	} catch (error) {
+		console.log(error.message);
+	}
+}
+
 export async function newUserSurvey(input, user) {
 	let response = {};
 
@@ -228,8 +279,8 @@ export async function newUserSurvey(input, user) {
 		const userSurvey = await saveUserSurvey(input, user);
 
 		const updatedUser = await analiseSkin(userSurvey);
-		console.log(updatedUser);
 		await updateUser(updatedUser, user);
+		await createChats({ ...updatedUser, _id: user });
 
 		if (updatedUser.skinType) {
 			result = true;

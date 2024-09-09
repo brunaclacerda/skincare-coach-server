@@ -58,8 +58,7 @@ async function createAssitant() {
 	const assistant = await openai.beta.assistants.create({
 		model: "gpt-4o-mini",
 		name: "Skincare coach",
-		// instructions: "You are a personal skincare coach. ",
-		instructions: "Answer with just a greeting. No more than 2 words.",
+		instructions: "You are a personal skincare coach. ",
 	});
 	await Parameter.updateOne({}, { chatbot: { assistantID: assistant.id } });
 	return assistant.id;
