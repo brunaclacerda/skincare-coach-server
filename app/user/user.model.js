@@ -47,15 +47,17 @@ const userSchema = new Schema(
 		password: {
 			type: "Buffer",
 			required: "Password is required.",
-			minlength: [10, "Password is shorter than 10 characters."],
-			validate(value) {
-				if (!validator.isStrongPassword(value.toString())) {
-					throw new Error(
-						"Password is not strong enough. It should cointain at least: " +
-							"1 letter lowercase, 1 letter uppercase, 1 number and 1 special character!"
-					);
-				}
-			},
+			minlength: [5, "Password is shorter than 5 characters."],
+			// for testing
+			// minlength: [10, "Password is shorter than 10 characters."],
+			// validate(value) {
+			// 	if (!validator.isStrongPassword(value.toString())) {
+			// 		throw new Error(
+			// 			"Password is not strong enough. It should cointain at least: " +
+			// 				"1 letter lowercase, 1 letter uppercase, 1 number and 1 special character!"
+			// 		);
+			// 	}
+			// },
 		},
 
 		status: {
