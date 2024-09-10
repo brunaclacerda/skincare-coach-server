@@ -38,7 +38,7 @@ router.post(
 		const resUser = {
 			name: req.user.name,
 			firstLogin: req.user.firstLogin,
-			isNew: true,
+			isNew: req.user.firstLogin ? false : true,
 		};
 		console.log(resUser);
 		res.send({
@@ -77,6 +77,19 @@ router.patch("/me", auth, async (req, res, next) => {
 
 		const user = await service.updateUser(req.body, req.user);
 		res.status(HTTP_STATUS.OK).send(user);
+	} catch (error) {
+		next({
+			message: error.message,
+			status: HTTP_STATUS.BAD_REQUEST,
+			cause: error,
+		});
+	}
+});
+
+router.get("/me", auth, async (req, res, next) => {
+	try {
+		const user = await service.me(req.user);
+		res.status(HTTP_STATUS.OK).send(await service.createChats(user));
 	} catch (error) {
 		next({
 			message: error.message,
