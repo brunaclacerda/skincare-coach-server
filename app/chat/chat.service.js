@@ -98,7 +98,7 @@ export async function startChat(chat, user, cbStream) {
 				answer: message.content[0].text.value,
 			}).then(
 				(chat) => {
-					if (chat?._id) cbStream("<<chat_id=" + chat._id);
+					if (chat?._id) cbStream("<<chat_id=" + chat._id, true);
 				},
 				(result) => {
 					console.log(result);

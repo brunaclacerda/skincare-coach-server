@@ -13,12 +13,12 @@ router.post("/", async (req, res, next) => {
 
 		res.header("Content-Type", "text/plain");
 		res.setHeader("Transfer-Encoding", "chunked");
-		const fnStream = function (message) {
+		const fnStream = function (message, done) {
 			res.write(message);
+			if (done) res.end();
 		};
 
 		await service.startChat(chat, req.user, fnStream);
-		res.end();
 	} catch (error) {
 		next({
 			message: error.message,
