@@ -5,5 +5,5 @@ export async function insert(input) {
 }
 
 export async function getAll() {
-    return Survey.find();
+    return await Survey.find();
 }

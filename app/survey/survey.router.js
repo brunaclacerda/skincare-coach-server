@@ -1,12 +1,12 @@
 import express from "express";
 
 import * as service from "./survey.service.js";
-import auth from "../middleware/auth.js";
+// import auth from "../middleware/auth.js";
 import { HTTP_STATUS } from "../utils/enum.js";
 
 const router = express.Router();
 
-router.post("/", auth, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
     try {
         if (!req.body) {
             return res.status(HTTP_STATUS.BAD_REQUEST).send();
@@ -21,7 +21,7 @@ router.post("/", auth, async (req, res, next) => {
     }
 });
 
-router.get("/", auth, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
     try {
         res.send(await service.getAll());
     } catch (error) {

@@ -6,10 +6,15 @@ export default function (err, req, res, next) {
         return next(err);
     }
 
+    const http_status =
+        !req.session.passport || !req.session.passport.user
+            ? HTTP_STATUS.UNAUTHORIZED
+            : HTTP_STATUS.BAD_REQUEST;
+
     res.locals.message = err.message;
     res.locals.error =
         env.NODE_ENV === "dev" ? (err.cause ? err.cause : err) : {};
     console.log("err");
-    res.status(err.status || HTTP_STATUS.BAD_REQUEST);
-    res.send(err.message);
+    res.status(err.status || http_status);
+    res.send({ failureMsg: err.message });
 }
